@@ -1,11 +1,14 @@
 import React,{useEffect,useState} from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, Image } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ActivityIndicator, Image, ImageBackground } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { create } from 'react-test-renderer';
 import {weatherApi} from '../api/weatherApi';
+const width = Dimensions.get('window').width; 
+const day = require("../assets/images/day.jpeg");
+const night = require("../assets/images/night.jpeg")
 
 function Home(props){
-  const [weather,setWeather]=useState({error: "error"})
+  const [weather,setWeather]=useState({})
   const [loading,setLoading]=useState(true)
   const [icon,setIcon]=useState("")
   const [dn,setDn]=useState("")
@@ -37,19 +40,17 @@ function Home(props){
       ((weather.error === "error") ? 
       (<Text style={styles.notfound}>City Not Found</Text>): 
 
-      (<View 
-       style={[styles.card,
-       ((dn === "day")?
-       (styles.day):
-       (((dn === "night")?
-       (styles.night):
-       ""
-       )))]}>
-        <Text>City: {weather.city},{weather.country}</Text>
-        <Text>Temprature: {weather.temprature}&deg;C</Text>
-        <Text> {weather.status}</Text>
-        <Image source={{uri: weatherIcon}} style={{width: 40, height: 40}} />
-      </View>)
+      (<ImageBackground source={(dn === "day") ? day : night} style={styles.image}>
+      <View 
+       style={styles.card}>
+        <Text style={(dn === "day")?styles.day:styles.night}>{weather.city},{weather.country}</Text>
+        <Text style={(dn === "day")?styles.day:styles.night}>{weather.temprature}&deg;C</Text>
+        <Text style={(dn === "day")?styles.day:styles.night}> 
+          {weather.status} 
+          <Image source={{uri: weatherIcon}} style={{width: 40, height: 40}} />
+        </Text>
+      </View>
+      </ImageBackground>)
 
       )
       }
@@ -63,21 +64,25 @@ const styles = StyleSheet.create({
     color: "#ffffff"
   },
   card:{
-    backgroundColor: "#ffffff",
-    height: 300,
-    width: 350,
-    borderRadius: 6,
-    color: "black"
+    marginBottom: 150
   },
-  day: {
-    backgroundColor : "#fffff1"
+  image: {
+    justifyContent: "center",
+    alignItems: "center",
+    height : "100%",
+    width: width
   },
-  night: {
-    backgroundColor : "#000000"
+  day:{
+    fontSize: 50,
+    fontWeight: "bold",
+    color: "#0f0901",
   },
-  notset: {
-    backgroundColor : "red"
+  night:{
+    fontSize: 50,
+    fontWeight: "bold",
+    color: "#ffffe1"
   }
+
   
 })
 
