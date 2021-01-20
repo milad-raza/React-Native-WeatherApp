@@ -8,6 +8,7 @@ import {
   Keyboard,
   Dimensions,
   ImageBackground,
+  KeyboardAvoidingView,
 } from 'react-native';
 import Home from './src/components/Home';
 import Splash from './src/components/Splash';
@@ -19,7 +20,7 @@ const width = Dimensions.get('window').width;
 const App: () => React$Node = () => {
   const [input, setInput] = useState('');
   const [search, setSearch] = useState(false);
-  const [splash, setSplash] = useState(true)
+  const [splash, setSplash] = useState(true);
 
   const handleChange = (e) => {
     setInput(e);
@@ -36,20 +37,19 @@ const App: () => React$Node = () => {
     }
   };
 
-  useEffect(()=>{
-    splashScreen = async() => {
+  useEffect(() => {
+    splashScreen = async () => {
       return new Promise((resolve) =>
-        setTimeout(
-          () => { setSplash(false) },
-          2000
-        )
+        setTimeout(() => {
+          setSplash(false);
+        }, 2000),
       );
-    }
-    splashScreen()
-  },[])
+    };
+    splashScreen();
+  }, []);
 
-  if(splash===true){
-    return(<Splash />)
+  if (splash === true) {
+    return <Splash />;
   }
 
   return (
@@ -82,14 +82,20 @@ const App: () => React$Node = () => {
           }}
         />
       </View>
-
-      <View style={styles.home}>
-        {search ? (
-          <Home search={input} />
-        ) : (
-          <ImageBackground source={main} style={styles.main}></ImageBackground>
-        )}
-      </View>
+      <KeyboardAvoidingView
+        style={{flex: 1, backgroundColor: '#312c51'}}
+        behavior={'height'}
+        keyboardVerticalOffset={-225}>
+        <View style={styles.home}>
+          {search ? (
+            <Home search={input} />
+          ) : (
+            <ImageBackground
+              source={main}
+              style={styles.main}></ImageBackground>
+          )}
+        </View>
+      </KeyboardAvoidingView>
     </>
   );
 };
