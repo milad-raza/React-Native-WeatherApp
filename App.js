@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import Home from './src/components/Home';
+import Splash from './src/components/Splash';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 const main = require('./src/assets/images/main.jpeg');
@@ -18,6 +19,7 @@ const width = Dimensions.get('window').width;
 const App: () => React$Node = () => {
   const [input, setInput] = useState('');
   const [search, setSearch] = useState(false);
+  const [splash, setSplash] = useState(true)
 
   const handleChange = (e) => {
     setInput(e);
@@ -33,6 +35,22 @@ const App: () => React$Node = () => {
       setSearch(false);
     }
   };
+
+  useEffect(()=>{
+    splashScreen = async() => {
+      return new Promise((resolve) =>
+        setTimeout(
+          () => { setSplash(false) },
+          2000
+        )
+      );
+    }
+    splashScreen()
+  },[])
+
+  if(splash===true){
+    return(<Splash />)
+  }
 
   return (
     <>
